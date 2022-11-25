@@ -1,5 +1,5 @@
 // Define Mongoose
-const { Schema, Types } = require('mongoose');
+const { Schema, Types, model } = require('mongoose');
 const Thought = require('./thought');
 
 // Create a new instance of the Mongoose schema to define shape of each document
@@ -17,8 +17,8 @@ const userSchema = new Schema({
     },
     required: [true, 'User phone number required']
   },
-  thoughts: [{ type: ObjectId, ref: 'thought' }],
-  friends: [{ type: ObjectId, ref: 'user' }],
+  thoughts: [{ type: Schema.Types.ObjectId, ref: 'thought' }],
+  friends: [{ type: Schema.Types.ObjectId, ref: 'user' }],
 },
   {
     toJSON: {
