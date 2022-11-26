@@ -1,4 +1,5 @@
 const req = require("express/lib/request");
+const { ObjectId } = require('mongoose').Types;
 const { thought, user } = require('../models');
 
 const userController = {
@@ -10,8 +11,7 @@ const userController = {
     },
     // Get a single user
     getSingleUser(req, res) {
-        user.findOne({ _id: req.params.userId })
-            .select('-__v')
+        user.findOne({ _id: req.params.id })
             .then((user) =>
                 !user
                     ? res.status(404).json({ message: 'No user with that ID' })
@@ -25,9 +25,24 @@ const userController = {
             .then((user) => res.json(user))
             .catch((err) => res.status(500).json(err));
     },
+    // update a user
+    updateUser(req, res) {
+        user.findOneAndUpdate(
+            { _id: req.params.id },
+            { $set: req.body },
+            { runValidators: true, new: true }
+        )
+            .then((user) =>
+                !user
+                    ? res.status(404).json({ message: 'No user with this id!' })
+                    : res.json(user)
+            )
+            .catch((err) => res.status(500).json(err));
+    },
+
     // Delete a user and associated apps
     deleteUser(req, res) {
-        user.findOneAndDelete({ _id: req.params.userId })
+        user.findOneAndDelete({ _id: req.params.id })
             .then((user) =>
                 !user
                     ? res.status(404).json({ message: 'No user with that ID' })
@@ -67,6 +82,7 @@ const userController = {
             .catch(err => res.json(err));
     },
 
+
     // DELETE /api/users/:userId/friends/:friendId
     deleteFriend({ params }, res) {
         // remove friendId from userId's friend list
@@ -80,20 +96,7 @@ const userController = {
                     res.status(404).json({ message: 'No user found with this userId' });
                     return;
                 }
-                // remove userId from friendId's friend list
-                user.findOneAndUpdate(
-                    { _id: params.friendId },
-                    { $pull: { friends: params.userId } },
-                    { new: true, runValidators: true }
-                )
-                    .then(dbUserData2 => {
-                        if (!dbUserData2) {
-                            res.status(404).json({ message: 'No user found with this friendId' })
-                            return;
-                        }
-                        res.json({ message: 'Successfully deleted the friend' });
-                    })
-                    .catch(err => res.json(err));
+                res.json(dbUserData);
             })
             .catch(err => res.json(err));
     }

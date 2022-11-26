@@ -46,3 +46,6 @@ A REST API for a social network web application where users can share their thou
 
 ## Questions
 If you have questions, email me at [drewsparker@icloud.com](mailto:drewsparker@icloud.com) or reach out on [GitHub](https://www.github.com/drewsparker).
+
+## Walkthrough Video
+[Video Example](https://www.github.com/drewsparker).

@@ -18,7 +18,7 @@ const reactionSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: createdAtVal => addDateSuffix(createdAtVal)
+        get: createdAtVal => dateFormat(createdAtVal)
     },
 },
     {
@@ -38,7 +38,7 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now(),
-            get: createdAtVal => addDateSuffix(createdAtVal)
+            get: createdAtVal => dateFormat(createdAtVal)
         },
         username: {
             type: String,
@@ -51,7 +51,7 @@ const thoughtSchema = new Schema(
             getters: true,
             virtuals: true
         },
-        id: false,
+        // id: false,
     }
 );
 
@@ -64,18 +64,6 @@ thoughtSchema.virtual('reactionCount').get(function () {
 
 const thought = model('thought', thoughtSchema);
 
-// Uses model to create new instance including subdocument
-// const reactionData = { reactionBody: 'cool', username: 'drewsparker' };
-
-// thought.create(
-//     { thoughtText: 'this is cool', username: 'drewsparker', reactions: [reactionData]},
-//     (err, data) => {
-//         if (err) {
-//             console.error(err);
-//         }
-//         console.log(data);
-//     }
-// );
 
 module.exports = thought;
 
